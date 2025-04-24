@@ -1,0 +1,51 @@
+#define BLYNK_TEMPLATE_ID "TMPL32kjlfcXP"
+#define BLYNK_TEMPLATE_NAME "HOME AUTOMATION"
+#define BLYNK_AUTH_TOKEN "bfMbia5K-UGB_cttBqc1z_RSeRhOpstk"
+
+#include <WiFi.h>
+#include <WiFiClient.h>
+#include <BlynkSimpleEsp32.h>
+
+// Replace with your WiFi credentials
+char ssid[] = "JOEL";
+char pass[] = "JOEL1234";
+
+// Relay pins
+#define LIGHT_RELAY 25
+#define FAN_RELAY 26
+
+void setup()
+{
+  // Initialize Serial Monitor
+  Serial.begin(115200);
+
+  // Set Relay Pins as Outputs
+  pinMode(LIGHT_RELAY, OUTPUT);
+  pinMode(FAN_RELAY, OUTPUT);
+
+  // Turn off everything at startup
+  digitalWrite(LIGHT_RELAY, HIGH);  // Relays are active LOW
+  digitalWrite(FAN_RELAY, HIGH);
+
+  // Start Blynk
+  Blynk.begin(BLYNK_AUTH_TOKEN, ssid, pass);
+}
+
+// Light Control
+BLYNK_WRITE(V0)
+{
+  int pinValue = param.asInt();
+  digitalWrite(LIGHT_RELAY, pinValue ? LOW : HIGH);
+}
+
+// Fan Control
+BLYNK_WRITE(V1)
+{
+  int pinValue = param.asInt();
+  digitalWrite(FAN_RELAY, pinValue ? LOW : HIGH);
+}
+
+void loop()
+{
+  Blynk.run();
+}
